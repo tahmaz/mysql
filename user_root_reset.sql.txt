@@ -1,0 +1,9 @@
+--mysql root user reset:
+service --status-all
+service mysql stop
+mysqld_safe --skip-grant-tables
+
+mysql -uroot -p
+update user set Password=PASSWORD('new-password') where user='root';
+flush privileges;
+exit;

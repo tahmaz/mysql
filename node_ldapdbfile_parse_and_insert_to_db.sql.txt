@@ -1,0 +1,161 @@
+/opt/telorb/axe/loadingGroup01_1/backups/ScheduledNetRed_2016_12_01_10:00:02/databaseBackup
+
+dataformatter -o -s -f lmContainer.* > database_output.txt
+
+/home/user/scripts/node/node_db_export
+
+/tmp/nodedb
+
+-----------------------
+./sync_db.sh
+
+
+cp /home/user/scripts/node/dataformatter /tmp/databaseBackup
+
+cd /tmp/databaseBackup
+
+/tmp/databaseBackup/dataformatter -o -s -f lmContainer.* > /tmp/database_output.txt
+
+---------------------------------------------------------
+vi Subsc.sql
+
+set unique_checks = 0;
+SET autocommit=0;
+SET foreign_key_checks=0;
+truncate table node.subsc;
+LOAD DATA LOCAL INFILE '/home/user/scripts/node/Subsc.txt' INTO TABLE node.subsc FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n';
+commit;
+
+cat  /home/user/scripts/node/repSubsc.txt | awk '{print ";"$0}' > /home/user/scripts/node/Subsc.txt
+
+/usr/bin/mysql -unodeuser -ppassword < /home/user/scripts/node/Subsc.sql
+
+---
+vi Accum.sql
+
+set unique_checks = 0;
+SET autocommit=0;
+SET foreign_key_checks=0;
+truncate table node.accum;
+LOAD DATA LOCAL INFILE '/home/user/scripts/node/Accum.txt' INTO TABLE node.accum FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n';
+commit;
+
+cat  /home/user/scripts/node/repAccum.txt | awk '{print ";"$0}' > /home/user/scripts/node/Accum.txt
+
+/usr/bin/mysql -unodeuser -ppassword < /home/user/scripts/node/Accum.sql
+
+
+--------------------------------------------------
+create database node;
+
+grant CREATE,INSERT,DELETE,UPDATE,SELECT on node.* to nodeuser@localhost;
+grant all privileges on node.* to nodeuser@localhost identified by 'password';
+flush privileges;
+
+create table node.subsc (
+id INT NOT NULL AUTO_INCREMENT,
+msisdn varchar(15),
+package varchar(100),
+     PRIMARY KEY (id),
+	INDEX (msisdn),
+	INDEX (package)
+);
+
+create table node.accum (
+id INT NOT NULL AUTO_INCREMENT,
+msisdn varchar(15),
+quota int,
+package varchar(100),
+     PRIMARY KEY (id),
+	INDEX (msisdn),
+	INDEX (quota),
+	INDEX (package)
+);
+
+
+
+/usr/bin/mysql -uroot -p < create_db.sql
+-------------------------------------------------------------
+
+SELECT msisdn as m, count(*) AS count FROM node.subsc GROUP BY m order by count desc limit 10;
+
+SELECT msisdn, package as p, count(*) AS count FROM node.subsc GROUP BY p having count=2 order by count desc limit 10;
+
+//paketlerin istifade statistikasi
+SELECT msisdn, SUBSTRING_INDEX(package,':',1) as p, count(*) AS count FROM node.subsc GROUP BY p order by count desc;
+
+//dublicate package, eyni nomre eyni paket
+select * from subsc where package="g_326:1670:04-11-2016T23:59:08";
+
+
+SELECT  *
+FROM    node.subsc sub1
+WHERE   EXISTS
+        (
+        SELECT  1
+        FROM    node.subsc sub2
+        WHERE   sub1.msisdn=sub2.msisdn and sub1.package=sub2.package
+        LIMIT 1, 1
+        );
+		
+		
+---------------------------------------------------------------
+vi /home/user/scripts/node/extract_node_db.sh
+
+TIME1=`date "+%Y-%m-%d %T"`
+echo "File syncronization: " $TIME1
+cd /home/user/scripts/node
+./sync_db.sh
+TIME2=`date "+%Y-%m-%d %T"`
+echo "File syncronization finished: " $TIME2
+tdiff=`./datediff.sh "$TIME1" "$TIME2"`
+echo "File syncronization duration : " $tdiff
+
+cp /home/user/scripts/node/dataformatter /tmp/databaseBackup
+cd /tmp/databaseBackup/
+
+
+TIME1=`date "+%Y-%m-%d %T"`
+echo "Database extraction started: " $TIME1
+/tmp/databaseBackup/dataformatter -o -s -f lmContainer.* > /tmp/database_output.txt
+TIME2=`date "+%Y-%m-%d %T"`
+echo "Database extraction finished: " $TIME2
+tdiff=`./datediff.sh "$TIME1" "$TIME2"`
+echo "Database extraction duration : " $tdiff
+
+
+TIME1=`date "+%Y-%m-%d %T"`
+echo "Filterring started: " $TIME1
+/home/user/scripts/node
+./readFile.pl
+TIME2=`date "+%Y-%m-%d %T"`
+echo "Filterring finished: " $TIME2
+tdiff=`./datediff.sh "$TIME1" "$TIME2"`
+echo "Filterring duration: " $tdiff
+
+
+TIME1=`date "+%Y-%m-%d %T"`
+echo "Subscribers inserting to database: " $TIME1
+cat  /home/user/scripts/node/repSubsc.txt | awk '{print ";"$0}' > /home/user/scripts/node/Subsc.txt
+/usr/bin/mysql -unodeuser -ppassword < /home/user/scripts/node/Subsc.sql
+TIME2=`date "+%Y-%m-%d %T"`
+echo "Subscribers inserting to database finished: " $TIME2
+tdiff=`./datediff.sh "$TIME1" "$TIME2"`
+echo "Subscribers inserting duration: " $tdiff
+
+TIME1=`date "+%Y-%m-%d %T"`
+echo "Accumulated data inserting to database: " $TIME1
+cat  /home/user/scripts/node/repAccum.txt | awk '{print ";"$0}' > /home/user/scripts/node/Accum.txt
+/usr/bin/mysql -unodeuser -ppassword < /home/user/scripts/node/Accum.sql
+TIME2=`date "+%Y-%m-%d %T"`
+echo "Accumulated data inserting to database finished: " $TIME2
+tdiff=`./datediff.sh "$TIME1" "$TIME2"`
+echo "SAccumulated data inserting duration: " $tdiff
+
+echo ""
+
+rm -fr /tmp/databaseBackup
+rm /home/user/scripts/node/*.txt
+============================================================
+
+TIME=`date "+%Y_%m_%d"`

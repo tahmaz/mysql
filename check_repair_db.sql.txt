@@ -1,0 +1,171 @@
+--------check db----------
+mysqlcheck -uroot -p password
+mysqlcheck --all-databases -uroot -p
+---------repair db cacti--------
+mysqlcheck -uroot -p --repair cacti
+================repair======================
+//repair table
+mysql -uroot -p databasename
+REPAIR TABLE tablename;
+
+============================================
+Example:
+mysqlcheck -uroot -p password
+
+Enter password: 
+cacti.cdef                                         OK
+cacti.cdef_items                                   OK
+cacti.colors                                       OK
+cacti.data_input                                   OK
+cacti.data_input_data                              OK
+cacti.data_input_fields                            OK
+cacti.data_local                                   OK
+cacti.data_template                                OK
+cacti.data_template_data                           OK
+cacti.data_template_data_rra                       OK
+cacti.data_template_rrd                            OK
+cacti.graph_local                                  OK
+cacti.graph_template_input                         OK
+cacti.graph_template_input_defs                    OK
+cacti.graph_templates                              OK
+cacti.graph_templates_gprint                       OK
+cacti.graph_templates_graph                        OK
+cacti.graph_templates_item                         OK
+cacti.graph_tree                                   OK
+cacti.graph_tree_items                             OK
+cacti.host                                         OK
+cacti.host_graph                                   OK
+cacti.host_snmp_cache                              OK
+cacti.host_snmp_query                              OK
+cacti.host_template                                OK
+cacti.host_template_graph                          OK
+cacti.host_template_snmp_query                     OK
+cacti.mypoll                                       OK
+cacti.plugin_config                                OK
+cacti.plugin_db_changes                            OK
+cacti.plugin_hooks                                 OK
+cacti.plugin_realms                                OK
+cacti.poller                                       OK
+cacti.poller_command                               OK
+cacti.poller_item                                  OK
+cacti.poller_output
+warning  : Table is marked as crashed
+error    : Size of datafile is: 16384         Should be: 16396
+error    : Corrupt
+cacti.poller_output_rt                             OK
+cacti.poller_reindex                               OK
+cacti.poller_time                                  OK
+cacti.rra                                          OK
+cacti.rra_cf                                       OK
+cacti.settings                                     OK
+cacti.settings_graphs                              OK
+cacti.settings_tree                                OK
+cacti.snmp_query                                   OK
+cacti.snmp_query_graph                             OK
+cacti.snmp_query_graph_rrd                         OK
+cacti.snmp_query_graph_rrd_sv                      OK
+cacti.snmp_query_graph_sv                          OK
+cacti.syslog                                       OK
+cacti.syslog_alert                                 OK
+cacti.syslog_facilities                            OK
+cacti.syslog_host_facilities                       OK
+cacti.syslog_hosts                                 OK
+cacti.syslog_incoming
+warning  : Table is marked as crashed
+error    : Size of datafile is: 4096         Should be: 4152
+error    : Corrupt
+cacti.syslog_logs                                  OK
+cacti.syslog_priorities                            OK
+cacti.syslog_remove                                OK
+cacti.syslog_removed                               OK
+cacti.syslog_reports                               OK
+cacti.syslog_statistics                            OK
+cacti.user_auth                                    OK
+cacti.user_auth_perms                              OK
+cacti.user_auth_realm                              OK
+cacti.user_log                                     OK
+cacti.version                                      OK
+cacti.weathermap_auth                              OK
+cacti.weathermap_data                              OK
+cacti.weathermap_groups                            OK
+cacti.weathermap_maps                              OK
+cacti.weathermap_settings                          OK
+[root@cacti cacti]# 
+[root@cacti cacti]# 
+[root@cacti cacti]# mysqlcheck -uroot -p --repair cacti
+Enter password: 
+cacti.cdef                                         OK
+cacti.cdef_items                                   OK
+cacti.colors                                       OK
+cacti.data_input                                   OK
+cacti.data_input_data                              OK
+cacti.data_input_fields                            OK
+cacti.data_local                                   OK
+cacti.data_template                                OK
+cacti.data_template_data                           OK
+cacti.data_template_data_rra                       OK
+cacti.data_template_rrd                            OK
+cacti.graph_local                                  OK
+cacti.graph_template_input                         OK
+cacti.graph_template_input_defs                    OK
+cacti.graph_templates                              OK
+cacti.graph_templates_gprint                       OK
+cacti.graph_templates_graph                        OK
+cacti.graph_templates_item                         OK
+cacti.graph_tree                                   OK
+cacti.graph_tree_items                             OK
+cacti.host                                         OK
+cacti.host_graph                                   OK
+cacti.host_snmp_cache                              OK
+cacti.host_snmp_query                              OK
+cacti.host_template                                OK
+cacti.host_template_graph                          OK
+cacti.host_template_snmp_query                     OK
+cacti.mypoll                                       OK
+cacti.plugin_config                                OK
+cacti.plugin_db_changes                            OK
+cacti.plugin_hooks                                 OK
+cacti.plugin_realms                                OK
+cacti.poller                                       OK
+cacti.poller_command                               OK
+cacti.poller_item                                  OK
+cacti.poller_output
+info     : Found block that points outside data file at 16356
+status   : OK
+cacti.poller_output_rt                             OK
+cacti.poller_reindex                               OK
+cacti.poller_time                                  OK
+cacti.rra                                          OK
+cacti.rra_cf                                       OK
+cacti.settings                                     OK
+cacti.settings_graphs                              OK
+cacti.settings_tree                                OK
+cacti.snmp_query                                   OK
+cacti.snmp_query_graph                             OK
+cacti.snmp_query_graph_rrd                         OK
+cacti.snmp_query_graph_rrd_sv                      OK
+cacti.snmp_query_graph_sv                          OK
+cacti.syslog                                       OK
+cacti.syslog_alert                                 OK
+cacti.syslog_facilities                            OK
+cacti.syslog_host_facilities                       OK
+cacti.syslog_hosts                                 OK
+cacti.syslog_incoming
+info     : Found block that points outside data file at 4044
+status   : OK
+cacti.syslog_logs                                  OK
+cacti.syslog_priorities                            OK
+cacti.syslog_remove                                OK
+cacti.syslog_removed                               OK
+cacti.syslog_reports                               OK
+cacti.syslog_statistics                            OK
+cacti.user_auth                                    OK
+cacti.user_auth_perms                              OK
+cacti.user_auth_realm                              OK
+cacti.user_log                                     OK
+cacti.version                                      OK
+cacti.weathermap_auth                              OK
+cacti.weathermap_data                              OK
+cacti.weathermap_groups                            OK
+cacti.weathermap_maps                              OK
+cacti.weathermap_settings                          OK

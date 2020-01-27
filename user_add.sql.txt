@@ -1,0 +1,26 @@
+mysql add user:
+
+mysql -h localhost  -u root
+
+create database sabacars;
+
+show grants for sabacars;
+select * from information_schema.user_privileges;
+
+
+grant CREATE,INSERT,DELETE,UPDATE,SELECT on sabacars.* to nmtsoft@localhost;
+grant all privileges on sabacars.* to nmtsoft@localhost identified by 'password';
+flush privileges;
+exit;
+----------------------------------------------------------
+CREATE USER 'myuser'@'localhost' IDENTIFIED BY 'mypass';
+CREATE USER 'cnouser'@'%' IDENTIFIED BY 'pass';    //from all host
+
+
+GRANT ALL ON *.* TO 'myuser'@'localhost';
+GRANT ALL ON cno.* TO 'cnouser'@'%';    //from all host
+
+----------------------------------------------------------
+for remote connection: 
+vi /etc/sysconfig/iptables
+service iptables restart

@@ -1,0 +1,1 @@
+mysqldump -utestuser -p --all-databases > full_bacup_03042013.txt

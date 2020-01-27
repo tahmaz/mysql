@@ -1,0 +1,29 @@
+{1 byte}	TINYINT[(M)]	-128 TO 127
+{2 bytes}	SMALLINT[(M)]	-32,768 to 32,767
+{3 bytes}	MEDIUMINT[(M)]	-8,388,608 to 8,388,607
+{4 bytes}	INT[(M)]	-/+2.147E+9
+{8 bytes}	BIGINT[(M)]	-/+9.223E+18
+{4 or 8}	FLOAT(p)	p=0-24  --> "FLOAT"
+{4 bytes}	FLOAT[(M,D)]	Min=+/-1.175E-38
+{8 bytes}	DOUBLE[(M,D)]	Min=+/-2.225E-308
+{M+2}		DECIMAL[(M,[D])]
+{8 bytes}	BIT[(M)]	Binary. Display by [add zero or converting with BIN()]. M=1-64	Prior to 5.03
+{M char's}	CHAR[(M)]	M=0-255 Characters, FIXED.
+{M char's1}	VARCHAR(M)	M=0-65,535 Characters
+{#char's1}	TINYTEXT2	0-255 Characters	BINARY, CHARACTER SET	NULL
+{#char's1}	TEXT2	0-65,535 Char's	BINARY, CHARACTER SET	NULL
+{#char's1}	MEDIUMTEXT2	0-16,777,215 Char's	BINARY, CHARACTER SET	NULL
+{#char's1}	LONGTEXT2	0-4,294,967,295 Char's	BINARY, CHARACTER SET	NULL
+{M bytes}	BINARY[(M)]	M=0-255 bytes, FIXED.	Global Only
+{M bytes}	VARBINARY(M)	0-65,535 bytes
+{#bytes1}	TINYBLOB	0-255 bytes	Global Only
+{#bytes1}	BLOB	0-65,535 bytes	Global Only
+{#bytes1}	MEDIUMBLOB	0-16,777,215 bytes	Global Only
+{#bytes1}	LONGBLOB	0-4,294,967,295 bytes	Global Only
+{1-2 bytes}	ENUM2
+{1-8 bytes}	SET2
+{3 bytes}	DATE	"1000-01-01" - "9999-12-31"	Global Only
+{8 bytes}	DATETIME	"1000-01-01 00:00:00" -
+{3 bytes}	TIME	"-838:59:59" - "838:59:59"	Global Only
+{4 bytes}	TIMESTAMP	19700101000000 -
+{1 bytes}	YEAR	1900 - 2155	Global Only

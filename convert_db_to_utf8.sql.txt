@@ -1,0 +1,40 @@
+1.CREATE DATABASE confluence CHARACTER SET utf8 COLLATE utf8_bin;
+2.[mysqld]  //my.ini faylinda ve ya unixde my.conf faylinda
+default-character-set=utf8
+3.mysql>status;
+4.mysql>ALTER TABLE tablename CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;
+5.mysql> use databasename;
+mysql> show table status;
+
+================================
+centos
+/etc/my.cnf faylina ashagidakilari elave et:
+
+[mysqld]
+default-character-set=utf8
+default-collation=utf8_general_ci
+character-set-server=utf8
+collation-server=utf8_general_ci
+init-connect='SET NAMES utf8'
+
+[client]
+default-character-set=utf8
+
+-------For ubuntu and mysql ver 5.6-----------
+[client]
+default-character-set=utf8
+
+[mysql]
+default-character-set=utf8
+
+[mysqld]
+collation-server = utf8_unicode_ci
+init-connect='SET NAMES utf8'
+character-set-server = utf8
+---
+
+mysql serveri restart ele:
+service mysqld restart
+
+SHOW VARIABLES LIKE 'collation%';
+SHOW VARIABLES LIKE 'character_set%';

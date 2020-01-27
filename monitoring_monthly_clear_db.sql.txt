@@ -1,0 +1,49 @@
+VPS mysql monthly clear planning:
+----------------------------------
+select * from access where month(timestamp)='01' limit 10;
+
+SELECT count(remoteHost) AS count, remoteHost FROM access GROUP BY remoteHost order by count desc;
+
+SELECT virtualHost, SUM(bytes)/1024/1024, count(virtualHost) AS count FROM access GROUP BY virtualHost order by count desc;
+
+count,remotehost
+count,virtualhost
+traffic,virtualhost
+
+===================
+
+SELECT remoteHost, (NOW() - INTERVAL 1 MONTH) as timestamp, 'count,remotehost' as query, count(remoteHost) AS bytes  FROM access where MONTH(timestamp)=MONTH(NOW() - INTERVAL 1 MONTH) AND YEAR(timestamp)=YEAR(NOW() - INTERVAL 1 MONTH) GROUP BY remoteHost order by bytes desc limit 10;
+
+INSERT INTO access (remotehost,timestamp,query,bytes) SELECT remoteHost, '2013-11-01' as timestamp, 'count,remotehost' as query, count(remoteHost) AS bytes  FROM access where MONTH(timestamp)='11' AND YEAR(timestamp)='2013' GROUP BY remoteHost order by bytes desc;
+
+SELECT virtualhost, '2013-11-01' as timestamp, 'count,virtualhost' as query, count(virtualhost) AS bytes  FROM access where MONTH(timestamp)='11' AND YEAR(timestamp)='2013' GROUP BY virtualhost order by bytes desc limit 10;
+
+INSERT INTO access (virtualhost,timestamp,query,bytes) SELECT virtualhost, '2013-11-01' as timestamp, 'count,virtualhost' as query, count(virtualhost) AS bytes  FROM access where MONTH(timestamp)='11' AND YEAR(timestamp)='2013' GROUP BY virtualhost order by bytes desc;
+
+SELECT virtualhost, '2014-02-01' as timestamp, 'traffic,virtualhost' as query, SUM(bytes) AS bytes  FROM access where MONTH(timestamp)='02' AND YEAR(timestamp)='2014' GROUP BY virtualhost order by bytes desc limit 10;
+
+INSERT INTO access (virtualhost,timestamp,query,bytes) SELECT virtualhost, '2014-02-01' as timestamp, 'traffic,virtualhost' as query, SUM(bytes) AS bytes  FROM access where MONTH(timestamp)='02' AND YEAR(timestamp)='2014' GROUP BY virtualhost order by bytes desc;
+
+select count(virtualhost) FROM access where MONTH(timestamp)='12' AND YEAR(timestamp)='2013'  AND query!='count,remotehost' AND query!='count,virtualhost' AND query!='traffic,virtualhost';
+
+DELETE FROM access where MONTH(timestamp)='11' AND YEAR(timestamp)='2013'  AND query!='count,remotehost' AND query!='count,virtualhost' AND query!='traffic,virtualhost';
+
+
+select * from access where query='traffic,virtualhost' order by virtualhost desc limit 10;
+=======================
+
+SELECT virtualhost, '2013-11-01' as timestamp, 'traffic,virtualhost' as query, SUM(bytes) AS bytes  FROM access where MONTH(timestamp)='11' AND YEAR(timestamp)='2013' GROUP BY virtualhost order by bytes desc limit 10;
+
+===================
+
+SELECT remoteHost, '2013-11-01' as timestamp, 'count,remotehost' as query, count(remoteHost) AS bytes  FROM access where MONTH(timestamp)='11' AND YEAR(timestamp)='2013' GROUP BY remoteHost order by bytes desc limit 10;
+
+
+INSERT INTO access (remotehost,timestamp,query,bytes) SELECT remoteHost, (NOW() - INTERVAL 1 MONTH) as timestamp, 'count,remotehost' as query, count(remoteHost) AS bytes  FROM access where MONTH(timestamp)=MONTH(NOW() - INTERVAL 1 MONTH) AND YEAR(timestamp)=YEAR(NOW() - INTERVAL 1 MONTH) GROUP BY remoteHost order by bytes desc;
+INSERT INTO access (virtualhost,timestamp,query,bytes) SELECT virtualhost, (NOW() - INTERVAL 1 MONTH) as timestamp, 'count,virtualhost' as query, count(virtualhost) AS bytes  FROM access where MONTH(timestamp)=MONTH(NOW() - INTERVAL 1 MONTH) AND YEAR(timestamp)=YEAR(NOW() - INTERVAL 1 MONTH) GROUP BY virtualhost order by bytes desc;
+INSERT INTO access (virtualhost,timestamp,query,bytes) SELECT virtualhost, (NOW() - INTERVAL 1 MONTH) as timestamp, 'traffic,virtualhost' as query, SUM(bytes) AS bytes  FROM access where MONTH(timestamp)=MONTH(NOW() - INTERVAL 1 MONTH) AND YEAR(timestamp)=YEAR(NOW() - INTERVAL 1 MONTH) GROUP BY virtualhost order by bytes desc;
+DELETE FROM access where MONTH(timestamp)=MONTH(NOW() - INTERVAL 1 MONTH) AND YEAR(timestamp)=YEAR(NOW() - INTERVAL 1 MONTH)  AND query!='count,remotehost' AND query!='count,virtualhost' AND query!='traffic,virtualhost';
+
+
+select * from access where query='traffic,virtualhost' order by virtualhost desc limit 10;
+=======================

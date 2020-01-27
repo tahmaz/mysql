@@ -1,0 +1,1 @@
+RENAME TABLE vlanlist TO mpbn_vlanlist;

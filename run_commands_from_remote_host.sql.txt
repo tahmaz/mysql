@@ -1,0 +1,5 @@
+--mysql
+/usr/bin/mysql -h 191.0.0.104 -umonty -psome_pass < /home/tahmaz/scripts/autoload/routers/bakrb1_interfacelist_delete.sql
+
+--oracle
+sqlplus username/password@oracle_instance @my_sql_commands.sql
